@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>창업가 유형 체크 (A/B 귀여운 버전)</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --sky:#3fb9ff;
+      --sky2:#169ee9;
+      --bg:#f6fbff;
+      --line:#d2ecff;
+      --navy:#0b1b33;
+      --muted:#7a859c;
+      --radius:16px;
+    }
+    body{
+      margin:0;
+      font-family:"Jua", sans-serif;
+      background:var(--bg);
+      color:var(--navy);
+      padding:16px;
+      display:flex; justify-content:center;
+    }
+    .wrap{ width:min(620px,100%); display:grid; gap:12px; }
+
+    header{
+      background:white;
+      padding:14px 16px;
+      border-radius:var(--radius);
+      border:2px solid var(--line);
+      text-align:center;
+      box-shadow:0 6px 16px rgba(0,0,0,0.04);
+    }
+    header .title{
+      font-size:20px; font-weight:900; color:var(--sky2);
+    }
+    header .sub{
+      font-size:13px; font-weight:800; color:var(--muted);
+      margin-top:4px; line-height:1.4;
+    }
+
+    .card{
+      background:white;
+      border:2px solid var(--line);
+      border-radius:var(--radius);
+      padding:14px;
+      box-shadow:0 6px 16px rgba(0,0,0,0.04);
+    }
+
+    .q-line{
+      display:grid;
+      grid-template-columns: 70px 1fr;
+      align-items:center;
+      padding:8px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .q-line:last-child{ border-bottom:none; }
+
+    .q-num{
+      font-size:18px; font-weight:900; text-align:center; color:var(--sky2);
+      display:flex; align-items:center; justify-content:center; gap:4px;
+    }
+    .q-num .mini{
+      font-size:14px;
+      transform: translateY(-1px);
+    }
+
+    .ab{
+      display:flex; gap:12px; justify-content:flex-end; align-items:center;
+    }
+    .ab input{ display:none; }
+
+    .ab label{
+      cursor:pointer;
+      width:56px; height:44px;
+      display:grid; place-items:center;
+      border-radius:999px;
+      background:white;
+      border:2px solid var(--line);
+      font-weight:900;
+      font-size:16px;
+      transition:.15s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+    }
+    .ab input:checked + label{
+      background: linear-gradient(90deg, var(--sky), var(--sky2));
+      color:white;
+      border-color:transparent;
+      transform:translateY(-2px);
+      box-shadow: 0 8px 16px rgba(22,158,233,0.25);
+    }
+
+    .actions{
+      display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:6px;
+    }
+    .btn{
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:900;
+      border:2px solid var(--line);
+      background:white;
+      font-size:15px;
+      transition:.15s;
+      font-family:"Jua", sans-serif;
+    }
+    .btn.primary{
+      background: linear-gradient(90deg, var(--sky), var(--sky2));
+      color:white;
+      border:none;
+    }
+    .btn:hover{ transform:translateY(-2px); }
+
+    .result{ display:none; margin-top:4px; }
+    .result.show{ display:grid; gap:10px; }
+
+    .result-title{
+      text-align:center;
+      font-size:20px; font-weight:900; color:var(--sky2);
+      margin-bottom:4px;
+    }
+
+    .result-img{
+      width:150px;
+      display:block;
+      margin:12px auto;
+      border-radius:12px;
+    }
+
+    table{
+      width:100%; border-collapse:collapse;
+      font-size:14px;
+      border-radius:12px; overflow:hidden;
+      border:2px solid var(--line);
+    }
+    th,td{
+      padding:8px; text-align:center;
+      border-bottom:1px solid var(--line);
+    }
+    th{ background:#eef8ff; font-weight:900; }
+    tr:last-child td{ border-bottom:none; }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="title">창업가 유형 체크</div>
+    <div class="sub">PPT 보고 A/B만 누르면 됨</div>
+  </header>
+
+  <section class="card">
+    <div id="qList"></div>
+
+    <div class="actions">
+      <button class="btn" id="resetBtn">초기화</button>
+      <button class="btn primary" id="calcBtn">결과 보기</button>
+    </div>
+  </section>
+
+  <section class="card result" id="resultBox">
+    <div class="result-title" id="finalType">-</div>
+
+    <!-- ★결과 이미지 출력 영역 -->
+    <img id="resultImg" class="result-img" src="" alt="">
+
+    <table>
+      <thead>
+        <tr><th>유형</th><th>점수</th></tr>
+      </thead>
+      <tbody id="scoreRows"></tbody>
+    </table>
+  </section>
+
+</div>
+
+<script>
+  const TOTAL = 10;
+
+  const qEmojis = ["🍜","🍽️","🧠","🧩","🎪","🎤","💭","📚","🌙","🚀"];
+
+  const map = [
+    {A:"hustler",    B:"obsessive"},
+    {A:"hustler",    B:"strategist"},
+    {A:"strategist", B:"obsessive"},
+    {A:"visionary",  B:"connector"},
+    {A:"hustler",    B:"obsessive"},
+    {A:"visionary",  B:"strategist"},
+    {A:"obsessive",  B:"connector"},
+    {A:"visionary",  B:"strategist"},
+    {A:"connector",  B:"obsessive"},
+    {A:"visionary",  B:"strategist"}
+  ];
+
+  const TYPES = {
+    obsessive:{  label:"🔎 집요한 전문가형", img:"obsessive.png" },
+    visionary:{  label:"💡 미래지향 리더형",  img:"visionary.png" },
+    hustler:{    label:"🔥 실천 중심형",      img:"hustler.png" },
+    strategist:{ label:"📊 전략 설계형",      img:"strategist.png" },
+    connector:{  label:"🤝 소통 조정형",      img:"connector.png" }
+  };
+
+  const qList = document.getElementById("qList");
+  const resultBox = document.getElementById("resultBox");
+  const finalType = document.getElementById("finalType");
+  const resultImg = document.getElementById("resultImg");
+  const scoreRows = document.getElementById("scoreRows");
+
+  function render(){
+    let html = "";
+    for(let i=1;i<=TOTAL;i++){
+      html +=
+        '<div class="q-line">' +
+          '<div class="q-num">Q'+i+' <span class="mini">'+qEmojis[i-1]+'</span></div>' +
+          '<div class="ab">' +
+            '<input type="radio" name="q'+i+'" id="q'+i+'a" value="A">' +
+            '<label for="q'+i+'a">A</label>' +
+            '<input type="radio" name="q'+i+'" id="q'+i+'b" value="B">' +
+            '<label for="q'+i+'b">B</label>' +
+          '</div>' +
+        '</div>';
+    }
+    qList.innerHTML = html;
+  }
+
+  function getSelections(){
+    const picks=[];
+    for(let i=1;i<=TOTAL;i++){
+      const el = document.querySelector('input[name="q'+i+'"]:checked');
+      picks.push(el ? el.value : null);
+    }
+    return picks;
+  }
+
+  function calc(){
+    const picks = getSelections();
+    if(picks.some(v => v === null)){
+      alert("선택하지 않은 문항이 있습니다!");
+      return;
+    }
+
+    const scores = { obsessive:0, visionary:0, hustler:0, strategist:0, connector:0 };
+    const history = [];
+
+    picks.forEach((p, idx)=>{
+      const t = map[idx][p];
+      scores[t]++;
+      history.push(t);
+    });
+
+    const max = Math.max(...Object.values(scores));
+    let winners = Object.entries(scores).filter(e => e[1] === max).map(e => e[0]);
+    let winKey = winners[0];
+
+    if(winners.length > 1){
+      for(let i = history.length-1; i >= 0; i--){
+        if(winners.includes(history[i])){
+          winKey = history[i];
+          break;
+        }
+      }
+    }
+
+    finalType.textContent = TYPES[winKey].label;
+
+    // ★ 이미지 출력
+    resultImg.src = TYPES[winKey].img;
+
+    scoreRows.innerHTML = Object.keys(TYPES).map(key => {
+      return '<tr><td>'+TYPES[key].label+'</td><td>'+scores[key]+'</td></tr>';
+    }).join("");
+
+    resultBox.classList.add("show");
+    resultBox.scrollIntoView({ behavior:"smooth" });
+  }
+
+  function resetAll(){
+    document.querySelectorAll("input[type=radio]").forEach(r => r.checked=false);
+    resultBox.classList.remove("show");
+    finalType.textContent="-";
+    resultImg.src="";
+    scoreRows.innerHTML="";
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }
+
+  document.getElementById("calcBtn").onclick = calc;
+  document.getElementById("resetBtn").onclick = resetAll;
+
+  render();
+</script>
+
+</body>
+</html>
