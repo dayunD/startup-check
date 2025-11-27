@@ -239,48 +239,79 @@
   const qEmojis = ["🍜","🍽️","🎪","🧩","💬","💭","⏰","🎤","📚","🚀"];
 
   /* ✅ 스토리 버전 10문항 + 매핑 유지 */
-  const questions = [
-    {
-      title:"오늘은 축제 준비 날! 학교 가기전, 배가 고프다면 나는?",
-      choices:{ A:"hustler", B:"obsessive" }
-    },
-    {
-      title:"학교 도착! 매점에 신상 메뉴가 나왔다면, 나는?",
-      choices:{ A:"visionary", B:"strategist" }
-    },
-    {
-      title:"운동장에 여러 체험 활동이 열렸다! 첫 활동을 고른다면?",
-      choices:{ A:"hustler", B:"strategist" }
-    },
-    {
-      title:"이제 본격적으로 축제 부스 준비를 시작하려 한다! 나는?",
-      choices:{ A:"connector", B:"obsessive" }
-    },
-    {
-      title:"단톡에 축제 공지가 폭발했다! 내 답장 스타일은?",
-      choices:{ A:"connector", B:"strategist" }
-    },
-    {
-      title:"갑자기 축제 부스 아이디어가 떠올랐다! 나는?",
-      choices:{ A:"visionary", B:"obsessive" }
-    },
-    {
-      title:"축제 운영 계획서 제출까지 남은 시간은 3시간! 나는?",
-      choices:{ A:"hustler", B:"strategist" }
-    },
-    {
-      title:"축제 준비 회의에서, 내 역할은?",
-      choices:{ A:"connector", B:"visionary" }
-    },
-    {
-      title:"축제 끝! 이제 현실 복귀,,, 시험 준비하는 나의 공부 스타일은?",
-      choices:{ A:"obsessive", B:"connector" }
-    },
-    {
-      title:"학교에서 ‘축제 운영’ 제안이 들어왔다! 나는?",
-      choices:{ A:"hustler", B:"visionary" }
+const questions = [
+  {
+    title:"오늘은 축제 준비 날! 학교 가기 전, 배가 고프다면 나는?",
+    choices:{ 
+      A:"hustler",   // 빨리 가서 준비 → 행동 우선
+      B:"obsessive"  // 든든하게 먹고 준비 → 안정·집중
     }
-  ];
+  },
+  {
+    title:"학교 도착! 매점에 신상 메뉴가 나왔다면, 나는?",
+    choices:{ 
+      A:"visionary",   // 신상 시도 → 아이디어·새로움
+      B:"strategist"   // 늘 먹던 메뉴 → 계획·안정
+    }
+  },
+  {
+    title:"운동장에 여러 체험 활동이 열렸다! 첫 활동을 고른다면?",
+    choices:{ 
+      A:"hustler",     // 보이는 대로 바로 체험
+      B:"strategist"   // 전체 보고 선택
+    }
+  },
+  {
+    title:"이제 본격적으로 축제 부스 준비를 시작하려 한다! 나는?",
+    choices:{ 
+      A:"connector",   // 팀원과 함께 의견 나누며
+      B:"obsessive"    // 혼자 맡아 하는 게 효율적
+    }
+  },
+  {
+    title:"친구가 단톡방에서 갑자기 '지금 설문조사 해야 해!'라고 보냈다!",
+    choices:{ 
+      A:"hustler",      // 바로 링크 열고 먼저 해버림
+      B:"strategist"    // 설문 내용을 먼저 확인하고 판단
+    }
+  },
+  {
+    title:"갑자기 축제 부스 아이디어가 떠올랐다! 나는?",
+    choices:{ 
+      A:"visionary",   // 바로 말해서 반응 확인
+      B:"obsessive"    // 혼자 정리 후 타이밍 잡음
+    }
+  },
+  {
+    title:"축제 당일, 선생님께 행사 전달사항을 전해야 한다면 나는?",
+    choices:{ 
+      A:"connector",   // 직접 가서 밝게 전달함
+      B:"visionary"    // 전달할 내용을 정리해 새로운 아이디어까지 더해 말함
+    }
+  },
+  {
+    title:"축제에서 맡고 싶은 역할은?",
+    choices:{ 
+      A:"connector",   // 사회자, 진행, 안내 등 사람 중심
+      B:"strategist"   // 운영보조, 동선 관리 등 체계 중심
+    }
+  },
+  {
+    title:"축제 끝! 이제 현실 복귀… 시험 준비하는 나의 공부 스타일은?",
+    choices:{ 
+      A:"obsessive",   // 혼자 조용히 집중
+      B:"connector"    // 친구들과 같이 문제 풀기
+    }
+  },
+  {
+    title:"학교에서 ‘축제 운영’ 제안이 들어왔다! 나는?",
+    choices:{ 
+      A:"hustler",     // 일단 도전하면서 배우기
+      B:"visionary"    // 큰 그림을 먼저 설계하고 진행 계획 세움
+    }
+  }
+];
+
 
   /* ✅ 결과 이미지 번호 매핑 */
   const TYPE_IMAGE = {
@@ -388,6 +419,7 @@
 
 </body>
 </html>
+
 
 
 
